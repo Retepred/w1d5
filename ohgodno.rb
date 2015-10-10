@@ -25,7 +25,7 @@ def item_locater
   puts "\n\nPlease type in your desired bays below after the prompts."
 
   puts "Type the names of the desired bays here, as shown  a1,b5,c6"
-  bays_input = gets.chomp
+  bays_input = gets.chomp.downcase
   bays = bays_input.split(",")
 
   final = @product_list.values_at(*bays)
@@ -43,7 +43,7 @@ end
 def distance_calculator
   puts `clear`
   puts "Type the names of the desired bays here, as shown a1,b5,c6"
-  bays_distance_input = gets.chomp
+  bays_distance_input = gets.chomp.downcase
   bays_distance_array = bays_distance_input.split(",")
   distance = bays_distance_array.collect {|bay|@locations.index(bay)}
   low = distance.min
@@ -61,18 +61,32 @@ def collection_planner
   puts "Welcome to your journey planner. As you are a useless human in need of help I will calculate your route for you. Follow the instructions precisely or death is a high probability."
   user_continue
   puts `clear`
-  puts 'Please input the items you wish to find as shown "candy wrapper", "deoderant", "hanger"'
-  human_values_original = gets.chomp
-
-
-  human_values = human_values_original
-  final_2 = @product_list_2.values_at(human_values)
-  puts final_2
+  puts "Please input the items you wish to find as shown candy wrapper, deoderant, hanger"
+  objects_input = gets.chomp.downcase
+  objects = objects_input.split(", ")
+  object_ids = objects.map { |s| @product_list.key(s) }
+  object_indexes = object_ids.map { |s| @locations.index(s) }.sort
+  object_order = object_indexes.sort.map { |s| @locations[s] }
+  distance = object_indexes.last - object_indexes.first
+  object_ids.each do |id|
+      puts "Product: #{@product_list[id]}, has ID of #{id}"
+  end
+  puts "The distance you will need to drag your bundle of bones is #{distance}! And unless you are an idiot you will visit them in this order: #{object_order}. Ah yes. I forgot."
   user_continue
   menu
 end  
 
 def menu
+  puts `clear`
+  puts"
+  \|||||/
+ ( ~   ~ )
+@( 0   0 )@
+ (   C   )
+  \ \_/ /
+   |___| 
+"
+  sleep 4
   puts `clear`
   puts "Go away and boil your head in tar. This programme is for idiots to use to work out how to walk. Because it is hard.. Apparently."
   puts "\nPlease select whih function you would like to use. Press the key indicated by the (brackets).\nI(t)em Locator?  D(i)stance Calculator?  C(o)llection Planner   or (q)uit"
